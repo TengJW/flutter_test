@@ -1,5 +1,15 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
+
+class IntlUtil {
+  static String getString(BuildContext context, String id,
+      {String languageCode, String countryCode, List<Object> params}) {
+    return CustomLocalizations.of(context).getString(id,
+        languageCode: languageCode, countryCode: countryCode, params: params);
+  }
+}
+
 
 class Utils {
   static String getImgPath(String name, {String format: 'png'}) {

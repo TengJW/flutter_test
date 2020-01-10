@@ -1,10 +1,9 @@
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/ui/mainPage.dart';
 import 'package:flutter_app/util/ColorsUtil.dart';
 import 'package:flutter_app/util/utils.dart';
-import 'dart:async';
 
-import 'RandomWords.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -12,29 +11,30 @@ class SplashPage extends StatefulWidget {
 }
 
 class SplashPageState extends State<SplashPage> {
-  var num = 10;
-  Timer timer;
-  final period = const Duration(seconds: 1);
-  var isAlived = false;
-  int _state = 0;
+  var timeNum = 3;
+  TimerUtil timer;
+  var _state = 0;
 
   @override
   void initState() {
     super.initState();
-    if (_state == 1)
-      timer = Timer.periodic(period, (timer) {
-        setState(() {
-          num--;
-          if (num <= 0) {
+
+    var isFirst = SpUtil.getBool("isFirst");
+    if (isFirst) {
+      setState(() {
+        _state = 1;
+        timer = new TimerUtil(mTotalTime: timeNum * 1000);
+        timer.setOnTimerTickCallback((int tick) {
+          double _tick = tick / 1000;
+          setState(() {
+            timeNum = _tick.toInt();
+          });
+          if (_tick <= 0) {
             timer.cancel();
             _goHome();
           }
         });
-      });
-    var isFirst = SpUtil.getBool("isFirst");
-    if (!isFirst) {
-      setState(() {
-        _state = 1;
+        timer.startCountDown();
       });
     }
   }
@@ -45,7 +45,7 @@ class SplashPageState extends State<SplashPage> {
       child: new Stack(
         children: <Widget>[
           new Offstage(
-            offstage: _state == 0,
+            offstage: _state != 0,
             child: new Container(
               child: InkWell(
                 child: new Container(
@@ -63,7 +63,7 @@ class SplashPageState extends State<SplashPage> {
             ),
           ),
           new Offstage(
-            offstage: _state == 1,
+            offstage: _state != 1,
             child: _getSplash(),
           ),
         ],
@@ -96,7 +96,7 @@ class SplashPageState extends State<SplashPage> {
                 },
                 color: ColorsUtil.hexColor(0x989B98, alpha: 0.85),
                 child: new Text(
-                  "跳过$num",
+                  "跳过$timeNum",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
@@ -117,7 +117,7 @@ class SplashPageState extends State<SplashPage> {
   void _goHome() {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (BuildContext context) => RandomWords()),
+      MaterialPageRoute(builder: (BuildContext context) => MainPage()),
       (Route<dynamic> route) => false,
     );
   }

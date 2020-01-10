@@ -1,7 +1,7 @@
+class Constants {
+  static const String status_success = "0";
 
-class Constants{
 
   static const String wan_android = "https://www.wanandroid.com/";
-
-
+  static const String banner = "$wan_android/banner/json";
 }

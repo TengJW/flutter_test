@@ -1,17 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/services.dart';
 
-import 'RandomWords.dart';
 import 'package:flustars/flustars.dart';
 
 import 'SplashPage.dart';
 import 'bloC/ApplicationBloc.dart';
 import 'bloC/bloc_provider.dart';
 import 'bloC/main_bloc.dart';
-import 'package:dio/dio.dart';
 
 void main() => init(() {
       runApp(BlocProvider<ApplicationBloc>(
