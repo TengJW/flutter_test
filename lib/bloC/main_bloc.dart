@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:flutter_app/common/Repository.dart';
+import 'package:flutter_app/common/commonStr.dart';
 import 'package:flutter_app/model/banner_modul_entity.dart';
+import 'package:flutter_app/util/dio/dioUtil.dart';
 import 'package:rxdart/rxdart.dart';
-
 import 'bloc_provider.dart';
 
 class MainBloC implements BlocBase {
@@ -13,8 +13,6 @@ class MainBloC implements BlocBase {
   Sink<List<BannerModulData>> get _bannerSink => _banner.sink;
 
   Stream<List<BannerModulData>> get bannerStream => _banner.stream;
-
-  var _repository = new Repository();
 
   @override
   void dispose() {
@@ -41,8 +39,11 @@ class MainBloC implements BlocBase {
   }
 
   Future getBanner() {
-    return _repository.getBanner().then((list) {
-      _bannerSink.add(UnmodifiableListView<BannerModulData>(list));
+    return DioManager().requestList<BannerModulData>(
+        NWMethod.GET, Constants.banner, success: (data) {
+      _bannerSink.add(UnmodifiableListView<BannerModulData>(data));
+    }, error: (err) {
+      print("error code = ${err.code}, massage = ${err.message}");
     });
   }
 }

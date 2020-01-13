@@ -3,5 +3,5 @@ class Constants {
 
 
   static const String wan_android = "https://www.wanandroid.com/";
-  static const String banner = "$wan_android/banner/json";
+  static const String banner = "/banner/json";
 }

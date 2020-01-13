@@ -6,11 +6,12 @@ import 'package:flutter_app/bloC/main_bloc.dart';
 import 'package:flutter_app/common/widgets.dart';
 import 'package:flutter_app/model/banner_modul_entity.dart';
 import 'package:flutter_app/model/moduls.dart';
+import 'package:flutter_app/util/ColorsUtil.dart';
 import 'package:rxdart/rxdart.dart';
 
 bool isHomeInit = true;
-class HomePage extends StatelessWidget {
 
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainBloC bloc = BlocProvider.of<MainBloC>(context);
@@ -25,11 +26,12 @@ class HomePage extends StatelessWidget {
 
     return new StreamBuilder(
       stream: bloc.bannerStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<BannerModulData>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<List<BannerModulData>> snapshot) {
         return new ListView(
           children: <Widget>[
             buildBanner(context, snapshot.data),
+            _getHead(),
           ],
         );
       },
@@ -68,6 +70,35 @@ class HomePage extends StatelessWidget {
 //            ),
           );
         }).toList(),
+      ),
+    );
+  }
+
+  Widget _getHead() {
+    return new Container(
+      height: 45,
+      alignment: Alignment.centerLeft,
+      child: new Stack(
+        children: <Widget>[
+          Positioned(
+            left: 0,
+            child: new Container(
+              child: new Text('推荐文章'),
+              padding: EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            child: new InkWell(
+              child: new Container(
+                child: new Text('查看更多'),
+                padding:
+                    EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
+              ),
+              onTap: () {},
+            ),
+          )
+        ],
       ),
     );
   }
