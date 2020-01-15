@@ -6,8 +6,12 @@ import 'package:flutter_app/bloC/main_bloc.dart';
 import 'package:flutter_app/common/widgets.dart';
 import 'package:flutter_app/model/banner_modul_entity.dart';
 import 'package:flutter_app/model/moduls.dart';
+import 'package:flutter_app/model/repos_model.dart';
 import 'package:flutter_app/util/ColorsUtil.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../ReposItem.dart';
+import '../webview.dart';
 
 bool isHomeInit = true;
 
@@ -24,17 +28,25 @@ class HomePage extends StatelessWidget {
       });
     }
 
-    return new StreamBuilder(
-      stream: bloc.bannerStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<List<BannerModulData>> snapshot) {
-        return new ListView(
-          children: <Widget>[
-            buildBanner(context, snapshot.data),
-            _getHead(),
-          ],
-        );
-      },
+    return ListView(
+      children: <Widget>[
+        new StreamBuilder(
+          stream: bloc.bannerStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<BannerModulData>> snapshot) {
+            return buildBanner(context, snapshot.data);
+          },
+        ),
+        _getHead(),
+        new StreamBuilder(
+          stream: bloc.reposStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ReposDataData>> snapshot) {
+            return _getRepos(context, snapshot.data);
+          },
+        ),
+      ],
+      controller: ScrollController(),
     );
   }
 
@@ -52,9 +64,13 @@ class HomePage extends StatelessWidget {
         children: list.map((model) {
           return new InkWell(
             onTap: () {
-//              LogUtil.e("BannerModel: " + model.toString());
-//              NavigatorUtil.pushWeb(context,
-//                  title: model.title, url: model.url);
+
+              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                return new MyWebView(
+                  model.url,
+                  title: model.title,
+                );
+              }));
             },
             child: new Image.network(
               "${model.imagePath}",
@@ -75,31 +91,56 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _getHead() {
-    return new Container(
-      height: 45,
-      alignment: Alignment.centerLeft,
-      child: new Stack(
+    return new ListTile(
+      onTap: () {},
+      title: new Row(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Positioned(
-            left: 0,
-            child: new Container(
-              child: new Text('推荐文章'),
-              padding: EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
-            ),
+          Icon(
+            Icons.library_books,
+            color: Colors.blue,
+            size: 18,
           ),
-          Positioned(
-            right: 0,
-            child: new InkWell(
-              child: new Container(
-                child: new Text('查看更多'),
-                padding:
-                    EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
-              ),
-              onTap: () {},
+          Padding(
+            child: new Text(
+              '推荐文章',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 15,
+                  fontStyle: FontStyle.normal),
             ),
+            padding: EdgeInsets.only(left: 10),
           )
         ],
       ),
+      trailing: new Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new Text(
+            '更多',
+            style: TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+          Icon(
+            Icons.chevron_right,
+            size: 17,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _getRepos(BuildContext context, List<ReposDataData> list) {
+    if (list == null || list.length == 0) {
+      return new Container(height: 0.0);
+    }
+    List<Widget> children = list.map((model) {
+      return new ReposItem(model, isHome: true);
+    }).toList();
+
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: children,
     );
   }
 }

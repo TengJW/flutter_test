@@ -4,7 +4,6 @@ import 'package:flutter_app/ui/mainPage.dart';
 import 'package:flutter_app/util/ColorsUtil.dart';
 import 'package:flutter_app/util/utils.dart';
 
-
 class SplashPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new SplashPageState();

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/commonStr.dart';
 import 'package:flutter_app/model/banner_modul_entity.dart';
+import 'package:flutter_app/model/repos_model.dart';
 
 const CODE = "errorCode";
 const MSG = "errorMsg";
@@ -15,6 +16,8 @@ class EntityFactory {
     //可以在这里加入任何需要并且可以转换的类型，例如下面
     else if (T.toString() == "BannerModulData") {
       return BannerModulData.fromJson(json) as T;
+    } else if (T.toString() == "ReposData") {
+      return ReposData.fromJson(json) as T;
     } else {
       return json as T;
     }

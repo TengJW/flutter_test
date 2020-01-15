@@ -69,25 +69,25 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.featured_play_list),
             title: Text(
               '项目',
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.bubble_chart),
             title: Text(
               '动态',
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.track_changes),
             title: Text(
               '体系',
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.perm_identity),
             title: Text(
               '我的',
             ),
